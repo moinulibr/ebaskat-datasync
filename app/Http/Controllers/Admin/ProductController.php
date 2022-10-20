@@ -39,6 +39,12 @@ class ProductController extends Controller
         $this->middleware('auth:admin');
     }
 
+
+    public function index()
+    {
+        $data['categories'] = Category::get();
+        return view('admin.product.index',$data);
+    }
     //have to complete
     public function productList(Request $request)
     {
@@ -69,6 +75,7 @@ class ProductController extends Controller
             $data['products'] = $query->orderBy('id', 'desc')
                                 ->paginate($pagination); 
             $data['page_no'] = $request->page ?? 1;
+            $data['categories'] = Category::get();
             $html = view('admin.product.ajax-response.list',$data)->render();
             return response([
                 'status' => true,
@@ -614,12 +621,7 @@ class ProductController extends Controller
                             ->toJson(); //--- Returning Json Data To Client Side
     }
 
-    //*** GET Request
-    public function index()
-    {
-        $data['categories'] = Category::get();
-        return view('admin.product.index');
-    }
+  
 
     //*** GET Request
     public function deactive()
